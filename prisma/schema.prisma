@@ -17,3 +17,41 @@ model User {
 
   @@map("users")
 }
+
+model Product {
+  id                 String               @id
+  description        String
+  code               String               @unique
+  unity              String
+  stock              Float
+  createdAt          DateTime
+  updatedAt          DateTime             @updatedAt
+  isActive           Boolean              @default(true)
+  Product_Production Product_Production[]
+
+  @@map("product")
+}
+
+model Production {
+  id                 String               @id
+  vehicleProduced    String
+  quantity           Int
+  dateStart          DateTime
+  endDate            DateTime
+  approved           Boolean
+  createdAt          DateTime
+  Product_Production Product_Production[]
+
+  @@map("production")
+}
+
+model Product_Production {
+  id           String @id
+  idProduct    String
+  idProduction String
+
+  product    Product    @relation(fields: [idProduct], references: [id])
+  production Production @relation(fields: [idProduction], references: [id])
+
+  @@map("product_production")
+}
