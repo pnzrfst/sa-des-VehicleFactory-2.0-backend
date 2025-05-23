@@ -4,7 +4,7 @@ import { productServices } from "../service/ProductServices";
 
 export async function productController(app: FastifyInstance) {
     
-
+    //criar o produto
     app.post('/product/create', async(request: FastifyRequest,  reply: FastifyReply) =>{
         const body = request.body as createProductRequest;
 
@@ -16,6 +16,7 @@ export async function productController(app: FastifyInstance) {
         }
     })
 
+    //trazer os produtos criados
     app.get('/product', async(request: FastifyRequest, reply: FastifyReply) =>{
         try {
             const list = await productServices.getAll();
@@ -25,9 +26,27 @@ export async function productController(app: FastifyInstance) {
         }
     })
     
-
+    //atualizar um produto
     app.patch('/product/update', async(request: FastifyRequest, reply: FastifyReply) =>{
+        const updatedProduct = request.body as updateProductRequest;
         
+        try {
+            await productServices.update(updatedProduct);
+            reply.code(200).send()
+        } catch (error: any) {
+            reply.code(400).send({erro: error.message})
+        }
+    })
+
+    app.delete('/product/delete', async(request: FastifyRequest, reply: FastifyReply) => {
+        const productToDelete = request.body as deleteProductRequest
+
+        try {
+            await productServices.delete(productToDelete);
+            reply.code(200).send();
+        } catch (error: any) {
+            reply.code(400).send({erro: error.message})
+        }
     })
 
 }
