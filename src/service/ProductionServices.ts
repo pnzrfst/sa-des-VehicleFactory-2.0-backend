@@ -30,7 +30,9 @@ class ProductionServices {
                 throw new Error("Erro: Produto está inativo.")
             }
 
-
+            await prisma.product.update({
+                {data: }
+            })
         }
 
 
