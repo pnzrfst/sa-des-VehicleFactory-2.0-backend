@@ -3,6 +3,22 @@ import { prisma } from "../prisma/client";
 import { updateSituationRequest } from "../types/Quality";
 
 class QualityServices {
+
+  public async getAll() {
+    const list = await prisma.production.findMany({
+      orderBy: {createdAt: 'desc'}
+    })
+
+    return list.map((production) => ({
+      veihicleProduced: production.vehicleProduced,
+      quantity: production.quantity,
+      dateStart: production.dateStart,
+      endDate: production.endDate,
+      approved: production.approved
+    }))
+  }
+
+
   public async getPending() {
     const list = await prisma.production.findMany({
       where: {

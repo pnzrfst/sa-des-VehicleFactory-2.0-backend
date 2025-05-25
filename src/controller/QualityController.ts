@@ -5,7 +5,7 @@ import {updateSituationRequest } from "../types/Quality";
 export async function qualityController(app: FastifyInstance) {
   app.get("/quality", async (request: FastifyRequest, reply: FastifyReply) => {
     try {
-      const list = await qualityServices.getPending();
+      const list = await qualityServices.getAll();
       reply.code(200).send(list);
     } catch (error: any) {
       reply.code(400).send({ erro: error.message });
@@ -29,6 +29,18 @@ export async function qualityController(app: FastifyInstance) {
     async (request: FastifyRequest, reply: FastifyReply) => {
       try {
         const list = await qualityServices.getRejected();
+        reply.code(200).send(list);
+      } catch (error: any) {
+        reply.code(400).send({ erro: error.message });
+      }
+    }
+  );
+
+  app.get(
+    "/quality/pending",
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      try {
+        const list = await qualityServices.getPending();
         reply.code(200).send(list);
       } catch (error: any) {
         reply.code(400).send({ erro: error.message });
