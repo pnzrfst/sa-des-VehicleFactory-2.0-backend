@@ -7,6 +7,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Situation {
+  pendentes
+  aprovadas
+  reprovadas
+}
+
 model User {
   id        String   @id
   name      String
@@ -39,7 +45,7 @@ model Production {
   quantity           Int
   dateStart          DateTime
   endDate            DateTime
-  approved           Boolean
+  approved           Situation
   createdAt          DateTime
   Product_Production Product_Production[]
 

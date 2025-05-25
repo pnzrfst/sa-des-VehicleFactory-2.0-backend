@@ -28,7 +28,8 @@ class ProductServices {
     public async getAll() {
 
         const allProducts = await prisma.product.findMany({
-            orderBy: { createdAt: 'desc' }
+            orderBy: { createdAt: 'desc' },
+            where: {isActive: true}
         })
 
         return allProducts.map(product => ({
@@ -56,7 +57,8 @@ class ProductServices {
                 description: description,
                 code: code,
                 unity: unity,
-                stock: stock
+                stock: stock,
+                updatedAt: new Date()
             }
         })
     }
@@ -76,7 +78,8 @@ class ProductServices {
             },
 
             data:{
-                isActive: false
+                isActive: false,
+                updatedAt: new Date()
             }
         })
     }
