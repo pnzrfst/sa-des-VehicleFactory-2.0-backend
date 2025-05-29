@@ -50,6 +50,15 @@ CREATE TABLE "product_production" (
     CONSTRAINT "product_production_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "quality" (
+    "id" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "idProduction" TEXT NOT NULL,
+
+    CONSTRAINT "quality_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
@@ -61,3 +70,6 @@ ALTER TABLE "product_production" ADD CONSTRAINT "product_production_idProduct_fk
 
 -- AddForeignKey
 ALTER TABLE "product_production" ADD CONSTRAINT "product_production_idProduction_fkey" FOREIGN KEY ("idProduction") REFERENCES "production"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "quality" ADD CONSTRAINT "quality_idProduction_fkey" FOREIGN KEY ("idProduction") REFERENCES "production"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

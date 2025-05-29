@@ -21,6 +21,7 @@ class UserService {
             name: name,
             email: email,
             password: passwordHashed,
+            birthDate: birthDate,
             createdAt: new Date(),
             updatedAt: new Date()
         }

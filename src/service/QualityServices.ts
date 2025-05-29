@@ -1,92 +1,62 @@
-import { Situation } from "@prisma/client";
+import { Maintenance, Quality, Situation } from "@prisma/client";
 import { prisma } from "../prisma/client";
-import { updateSituationRequest } from "../types/Quality";
+import { createQualityType, updateQualityType } from "../types/Quality";
 
 class QualityServices {
 
-  public async getAll() {
-    const list = await prisma.production.findMany({
-      orderBy: {createdAt: 'desc'}
+  public async updateSituation({ id, idProduction, description, status }: updateQualityType) {
+    const qualityRecordExists = await prisma.quality.findUnique({
+      where: { id: id }
     })
 
-    return list.map((production) => ({
-      veihicleProduced: production.vehicleProduced,
-      quantity: production.quantity,
-      dateStart: production.dateStart,
-      endDate: production.endDate,
-      approved: production.approved
-    }))
-  }
-
-
-  public async getPending() {
-    const list = await prisma.production.findMany({
-      where: {
-        approved: "pendentes",
-      },
-    });
-
-    return list.map((production) => ({
-      vehicleProduced: production.vehicleProduced,
-      quantity: production.quantity,
-      dateStart: production.dateStart,
-      endDate: production.endDate,
-      approved: production.approved,
-    }));
-  }
-
-  public async getApproved() {
-    const list = await prisma.production.findMany({
-      where: {
-        approved: "aprovadas",
-      },
-    });
-
-    return list.map((production) => ({
-      vehicleProduced: production.vehicleProduced,
-      quantity: production.quantity,
-      dateStart: production.dateStart,
-      endDate: production.endDate,
-      approved: production.approved,
-    }));
-  }
-
-  public async getRejected() {
-    const list = await prisma.production.findMany({
-      where: {
-        approved: "reprovadas",
-      },
-    });
-
-    return list.map((production) => ({
-      vehicleProduced: production.vehicleProduced,
-      quantity: production.quantity,
-      dateStart: production.dateStart,
-      endDate: production.endDate,
-      approved: production.approved,
-    }));
-  }
-
-  public async patchApprovedProduction({
-    id,
-    approved,
-  }: updateSituationRequest): Promise<void> {
-    const productionAlreadyExist = await prisma.production.findUnique({
-      where: { id: id },
-    });
-
-    if (!productionAlreadyExist) {
-      throw new Error("ERRO: Essa produção não consta na nossa base de dados.");
+    if (!qualityRecordExists) {
+      throw new Error("ERRO: não existe nenhum registro para essa produção.")
     }
 
-    await prisma.production.update({
-      where: {
-        id: id,
-      },
-      data: {
-        approved: approved,
-      },
-    });
+    if (status === Situation.aprovadas) {
+      const productionDataUpdate = {
+        description: description,
+        status: status
+      }
+
+      await prisma.quality.update({
+        where: { id: id },
+        data: productionDataUpdate
+      })
+    } else if (status === Situation.reprovadas) {
+
+      const productionToMaintain = await prisma.quality.findUnique({
+        where: { id: idProduction }
+      })
+
+      if (!productionToMaintain) {
+        throw new Error("Production not found");
+      }
+
+      const productionDataUpdate = {
+        description: description,
+        status: status
+      }
+
+      await prisma.quality.update({
+        where: { id: id },
+        data: productionDataUpdate
+      })
+
+      const maintenance: Maintenance = {
+        id: crypto.randomUUID(),
+        description: "",
+        idProduction: idProduction,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
+
+      await prisma.maintenance.create({ data: maintenance });
+
+    } else {
+      throw new Error("ERRO: Por favor, insira um valor válido entre PENDENTE, APROVADA OU REPROVADA.")
+    }
+
   }
 }
 

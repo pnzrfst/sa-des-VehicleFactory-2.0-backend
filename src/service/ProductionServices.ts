@@ -1,5 +1,5 @@
 
-import { Product_Production, Production } from "@prisma/client"
+import { Product_Production, Production, Quality } from "@prisma/client"
 import { prisma } from "../prisma/client"
 import { Situation } from "../types/Situation";
 
@@ -50,14 +50,27 @@ class ProductionServices {
             vehicleProduced: data.vehicleProduced,
             quantity: data.quantity,
             dateStart: data.dateStart,
-            endDate: data.dateStart,
-            approved: Situation.Pendentes
+            endDate: data.dateStart
         }
-
 
         await prisma.production.create({
             data: production
         })
+
+        const quality : Quality = {
+            id: crypto.randomUUID(),
+            description: "",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            status: Situation.Pendentes,
+            idProduction: production.id,
+        }
+
+        await prisma.quality.create({
+            data: quality
+        })
+
+
 
         for(const product of data.vehicleComposition){
             await prisma.product_Production.create({
@@ -83,7 +96,6 @@ class ProductionServices {
             quantity: production.quantity,
             dateStart: production.dateStart,
             endDate: production.endDate,
-            approved: production.approved,
             createdAt: production.createdAt
         }))
     }

@@ -1,6 +1,15 @@
 import { Situation } from "@prisma/client"
 
-type updateSituationRequest = {
+type createQualityType = {
     id: string,
-    approved: Situation
+    description: string,
+    idProduction: string,
+    status: Situation
+}
+
+type updateQualityType = {
+    id: string,
+    description: string,
+    idProduction: string,
+    status: Situation
 }

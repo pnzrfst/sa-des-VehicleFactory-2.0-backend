@@ -45,9 +45,10 @@ model Production {
   quantity           Int
   dateStart          DateTime
   endDate            DateTime
-  approved           Situation
   createdAt          DateTime
   Product_Production Product_Production[]
+  Quality            Quality[]
+  Maintenance        Maintenance[]
 
   @@map("production")
 }
@@ -61,4 +62,29 @@ model Product_Production {
   production Production @relation(fields: [idProduction], references: [id])
 
   @@map("product_production")
+}
+
+model Quality {
+  id           String    @id
+  description  String
+  status       Situation
+  idProduction String
+  createdAt    DateTime
+  updatedAt    DateTime
+
+  production Production @relation(fields: [idProduction], references: [id])
+
+  @@map("quality")
+}
+
+model Maintenance {
+  id           String   @id
+  description  String
+  idProduction String
+  createdAt    DateTime
+  updatedAt     DateTime
+
+  production Production @relation(fields: [idProduction], references: [id])
+
+  @@map("maintenance")
 }
