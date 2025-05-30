@@ -1,6 +1,6 @@
 import { Maintenance, Quality, Situation } from "@prisma/client";
 import { prisma } from "../prisma/client";
-import { createQualityType, updateQualityType } from "../types/Quality";
+import { updateQualityType } from "../types/Quality";
 
 class QualityServices {
 
@@ -25,12 +25,12 @@ class QualityServices {
       })
     } else if (status === Situation.reprovadas) {
 
-      const productionToMaintain = await prisma.quality.findUnique({
+      const productionToMaintain = await prisma.production.findUnique({
         where: { id: idProduction }
       })
 
       if (!productionToMaintain) {
-        throw new Error("Production not found");
+        throw new Error("Produção não encontrada.");
       }
 
       const productionDataUpdate = {
@@ -57,6 +57,20 @@ class QualityServices {
       throw new Error("ERRO: Por favor, insira um valor válido entre PENDENTE, APROVADA OU REPROVADA.")
     }
 
+  }
+
+  public async getAll() {
+    const allQualitys = await prisma.quality.findMany({
+      orderBy: { createdAt: 'desc' }
+    })
+
+    return allQualitys.map(quality => ({
+      idProduction: quality.idProduction,
+      description: quality.description,
+      status: quality.status,
+      createdAt: quality.createdAt,
+      updatedAt: quality.updatedAt
+    }))
   }
 }
 

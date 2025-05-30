@@ -68,7 +68,7 @@ model Quality {
   id           String    @id
   description  String
   status       Situation
-  idProduction String
+  idProduction String    @unique
   createdAt    DateTime
   updatedAt    DateTime
 
@@ -82,7 +82,7 @@ model Maintenance {
   description  String
   idProduction String
   createdAt    DateTime
-  updatedAt     DateTime
+  updatedAt    DateTime
 
   production Production @relation(fields: [idProduction], references: [id])
 

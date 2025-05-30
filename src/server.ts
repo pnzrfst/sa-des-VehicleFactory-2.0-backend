@@ -8,6 +8,7 @@ import fastifySwaggerUi from "@fastify/swagger-ui";
 import { productController } from "./controller/ProductController";
 import { productionController } from "./controller/ProductionController";
 import { qualityController } from "./controller/QualityController";
+import { maintenanceController} from "./controller/MaintenanceController";
 
 const app = fastify();
 
@@ -27,6 +28,7 @@ app.register(userController);
 app.register(productController);
 app.register(productionController);
 app.register(qualityController);
+app.register(maintenanceController)
 
 const PORT = 3333;
 app.listen({ port: PORT }).then(() => {
