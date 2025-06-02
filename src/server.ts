@@ -28,7 +28,7 @@ app.register(userController);
 app.register(productController);
 app.register(productionController);
 app.register(qualityController);
-app.register(maintenanceController)
+app.register(maintenanceController);
 
 const PORT = 3333;
 app.listen({ port: PORT }).then(() => {
