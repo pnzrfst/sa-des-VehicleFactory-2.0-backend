@@ -34,9 +34,11 @@ class MaintenanceServices {
         })
 
         return allMaintenance.map(maintenance => ({
-            code: maintenance.idProduction,
+            id: maintenance.id,
+            lote: maintenance.idProduction,
+            description: maintenance.description,
             createdAt: maintenance.createdAt,
-            description: maintenance.description
+            updatedAt: maintenance.updatedAt
         }))
     }
 }
