@@ -25,6 +25,16 @@ export async function productController(app: FastifyInstance) {
             reply.code(400).send({erro: error.message});
         }
     })
+
+    app.get('/product/filtered', async(request: FastifyRequest, reply: FastifyReply) =>{
+        const description = request.body as string
+        try {
+            const list = await productServices.getByDescription(description);
+            reply.code(200).send(list)
+        } catch (error: any) {
+            reply.code(400).send({erro: error.message});
+        }
+    })
     
     //atualizar um produto
     app.patch('/product/update', async(request: FastifyRequest, reply: FastifyReply) =>{

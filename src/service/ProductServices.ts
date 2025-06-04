@@ -40,6 +40,26 @@ class ProductServices {
             id: product.id
         }))
     }
+public async getByDescription(description: string) {
+    const allProducts = await prisma.product.findMany({
+        orderBy: { createdAt: 'desc' },
+        where: {
+            isActive: true,
+            description: {
+                contains: description,
+                mode: 'insensitive'
+            }
+        }
+    })
+
+    return allProducts.map(product => ({
+        description: product.description,
+        code: product.code,
+        unity: product.unity,
+        stock: product.stock,
+        id: product.id
+    }))
+}
 
     public async update({ description, unity, stock, id }: updateProductRequest): Promise<void> {
         const productAlreadyExist = await prisma.product.findUnique({
