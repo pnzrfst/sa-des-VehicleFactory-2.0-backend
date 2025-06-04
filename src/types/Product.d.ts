@@ -7,9 +7,9 @@ type createProductRequest = {
 
 type updateProductRequest = {
     description: string;
-    code: string;
     unity: string;
     stock: number;
+    id: string
 }
 
 type deleteProductRequest = {

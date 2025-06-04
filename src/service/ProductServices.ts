@@ -36,13 +36,14 @@ class ProductServices {
             description: product.description,
             code: product.code,
             unity: product.unity,
-            stock: product.stock
+            stock: product.stock,
+            id: product.id
         }))
     }
 
-    public async update({ description, code, unity, stock }: updateProductRequest): Promise<void> {
+    public async update({ description, unity, stock, id }: updateProductRequest): Promise<void> {
         const productAlreadyExist = await prisma.product.findUnique({
-            where: { code: code }
+            where: { id: id }
         })
 
         if (!productAlreadyExist) {
@@ -51,11 +52,10 @@ class ProductServices {
 
         await prisma.product.update({
             where: {
-                code: code
+                id: id
             },
             data: {
                 description: description,
-                code: code,
                 unity: unity,
                 stock: stock,
                 updatedAt: new Date()
