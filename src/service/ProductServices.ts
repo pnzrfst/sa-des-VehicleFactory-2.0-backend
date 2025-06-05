@@ -47,7 +47,7 @@ public async getByDescription(search: string) {
             isActive: true,
             description: {
                 contains: search,
-                mode: 'insensitive'
+                mode: 'insensitive' 
             }
         }
     })
