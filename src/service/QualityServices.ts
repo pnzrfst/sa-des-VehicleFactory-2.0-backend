@@ -59,12 +59,45 @@ class QualityServices {
 
   }
 
-  public async getAll() {
+  public async getPendings() {
     const allQualitys = await prisma.quality.findMany({
-      orderBy: { createdAt: 'desc' }
+      orderBy: { createdAt: 'desc' },
+      where: {status: "pendentes"}
     })
 
     return allQualitys.map(quality => ({
+      id: quality.id,
+      idProduction: quality.idProduction,
+      description: quality.description,
+      status: quality.status,
+      createdAt: quality.createdAt,
+      updatedAt: quality.updatedAt
+    }))
+  }
+
+  public async getApproved() {
+    const allQualitys = await prisma.quality.findMany({
+      orderBy: { createdAt: 'desc' },
+      where: {status: "aprovadas"}
+    })
+
+    return allQualitys.map(quality => ({
+      id: quality.id,
+      idProduction: quality.idProduction,
+      description: quality.description,
+      status: quality.status,
+      createdAt: quality.createdAt,
+      updatedAt: quality.updatedAt
+    }))
+  }
+  public async getRejected() {
+    const allQualitys = await prisma.quality.findMany({
+      orderBy: { createdAt: 'desc' },
+      where: {status: "reprovadas"}
+    })
+
+    return allQualitys.map(quality => ({
+      id: quality.id,
       idProduction: quality.idProduction,
       description: quality.description,
       status: quality.status,
@@ -73,5 +106,6 @@ class QualityServices {
     }))
   }
 }
+
 
 export const qualityServices = new QualityServices();

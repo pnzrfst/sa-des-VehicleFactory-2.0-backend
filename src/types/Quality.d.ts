@@ -8,8 +8,8 @@ type createQualityType = {
 }
 
 type updateQualityType = {
-    id: string,
-    description: string,
-    idProduction: string,
+    id: string;
+    idProduction: string;
+    description: string;
     status: Situation
 }

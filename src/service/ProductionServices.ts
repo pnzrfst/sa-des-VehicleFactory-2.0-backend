@@ -86,6 +86,7 @@ class ProductionServices {
     });
 
     return allProductions.map((production) => ({
+      id: production.id,
       vehicleProduced: production.vehicleProduced,
       quantity: production.quantity,
       dateStart: production.dateStart,
