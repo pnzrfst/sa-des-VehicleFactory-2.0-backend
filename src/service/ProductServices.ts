@@ -40,13 +40,13 @@ class ProductServices {
             id: product.id
         }))
     }
-public async getByDescription(description: string) {
+public async getByDescription(search: string) {
     const allProducts = await prisma.product.findMany({
         orderBy: { createdAt: 'desc' },
         where: {
             isActive: true,
             description: {
-                contains: description,
+                contains: search,
                 mode: 'insensitive'
             }
         }

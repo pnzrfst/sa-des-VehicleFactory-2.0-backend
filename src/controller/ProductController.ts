@@ -27,9 +27,9 @@ export async function productController(app: FastifyInstance) {
     })
 
     app.get('/product/filtered', async(request: FastifyRequest, reply: FastifyReply) =>{
-        const description = request.body as string
+        const {search} =  request.query as { search: string };
         try {
-            const list = await productServices.getByDescription(description);
+            const list = await productServices.getByDescription(search);
             reply.code(200).send(list)
         } catch (error: any) {
             reply.code(400).send({erro: error.message});
