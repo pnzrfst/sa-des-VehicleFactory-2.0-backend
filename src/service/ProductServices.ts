@@ -22,7 +22,9 @@ class ProductServices {
             isActive: true
         }
 
-        await prisma.product.create({ data: product })
+        await prisma.$transaction([
+            prisma.product.create({data: product})
+        ])
     }
 
     public async getAll() {
